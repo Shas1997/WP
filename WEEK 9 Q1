@@ -1,0 +1,143 @@
+
+MEDICALSHOP.JSX
+
+import React, { useState } from 'react';
+
+const MedicalShop = () => {
+  // Initial inventory state with at least three items
+  const [inventory, setInventory] = useState([
+    { id: 1, name: 'Paracetamol', quantity: 50, price: 10.0 },
+    { id: 2, name: 'Aspirin', quantity: 30, price: 15.5 },
+    { id: 3, name: 'Band-Aid', quantity: 100, price: 5.0 }
+  ]);
+
+  // State for the new medicine input form
+  const [newMedicine, setNewMedicine] = useState({
+    name: '',
+    quantity: '',
+    price: ''
+  });
+
+  // Handle input changes in the form
+  const handleNewMedicineChange = (e) => {
+    const { name, value } = e.target;
+    setNewMedicine({
+      ...newMedicine,
+      [name]: value
+    });
+  };
+
+  // Handle form submission and validation
+  const handleAddMedicine = (e) => {
+    e.preventDefault();
+
+    // Check if any field is empty
+    if (!newMedicine.name.trim() || newMedicine.quantity === '' || newMedicine.price === '') {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    // Generate a new unique ID using Math.max()
+    const newId = inventory.length > 0 ? Math.max(...inventory.map(item => item.id)) + 1 : 1;
+
+    const itemToAdd = {
+      id: newId,
+      name: newMedicine.name,
+      quantity: parseInt(newMedicine.quantity, 10),
+      price: parseFloat(newMedicine.price)
+    };
+
+    // Update inventory and reset form fields
+    setInventory([...inventory, itemToAdd]);
+    setNewMedicine({ name: '', quantity: '', price: '' });
+  };
+
+  return (
+    <div className="container my-4">
+      <h1 className="text-primary mb-3">Medical Shop Inventory</h1>
+
+      {/* Inventory Table */}
+      <table className="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {inventory.map((item) => (
+            <tr key={item.id}>
+              <td>{item.id}</td>
+              <td>{item.name}</td>
+              <td>{item.quantity}</td>
+              <td>{item.price.toFixed(2)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Add New Medicine Section */}
+      <div className="mt-4">
+        <h2 className="text-success mb-3">Add New Medicine</h2>
+        <form onSubmit={handleAddMedicine}>
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Name"
+              name="name"
+              value={newMedicine.name}
+              onChange={handleNewMedicineChange}
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Quantity"
+              name="quantity"
+              min="0"
+              value={newMedicine.quantity}
+              onChange={handleNewMedicineChange}
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Price"
+              name="price"
+              step="0.01"
+              min="0"
+              value={newMedicine.price}
+              onChange={handleNewMedicineChange}
+            />
+          </div>
+          <button type="submit" className="btn btn-success w-100">
+            Add Medicine
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default MedicalShop;
+
+APP.JS
+
+import React from 'react';
+import MedicalShop from './components/MedicalShop';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <MedicalShop />
+    </div>
+  );
+}
+
+export default App;
