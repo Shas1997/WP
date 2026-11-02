@@ -1,0 +1,104 @@
+Project Title: Transit Connect - Metro Departure Board
+
+STOPCARD.JSX
+import React from 'react';
+import './StopCard.css';
+
+const StopCard = ({ station, time }) => {
+  return (
+    <div className="stop-card">
+      <h2>{station}</h2>
+      <p>Due in {time} min</p>
+    </div>
+  );
+};
+
+export default StopCard;
+
+APP.JS
+import React from 'react';
+import StopCard from './components/StopCard';
+import './App.css';
+
+function App() {
+  return (
+    <div className="app-container">
+      <header className="app-header">
+        <h1>Transit Connect</h1>
+        <h3>Metro Departure Board</h3>
+      </header>
+      <main className="board-container">
+        <StopCard station="Central Square" time={4} />
+        <StopCard station="Riverside" time={9} />
+        <StopCard station="Airport Link" time={15} />
+      </main>
+    </div>
+  );
+}
+
+export default App;
+
+STOPCARD.CSS
+.stop-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  margin: 10px 0;
+  background-color: #1e1e2f;
+  border-left: 5px solid #ffb703;
+  border-radius: 4px;
+  color: #ffffff;
+}
+
+.stop-card h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+}
+
+.stop-card p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #4cc9f0;
+}
+
+APP.CSS
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.app-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #0f111a;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #ffffff;
+}
+
+.app-header h3 {
+  margin: 5px 0 0;
+  font-size: 1.1rem;
+  color: #a0a0a0;
+  font-weight: 400;
+}
+
+.board-container {
+  display: flex;
+  flex-direction: column;
+}
