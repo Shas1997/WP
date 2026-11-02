@@ -1,0 +1,42 @@
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divakar - Personal Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Divakar</h1>
+    </header>
+
+    <!-- Introduction Section -->
+    <article>
+        <h2>About Me</h2>
+        <p>Hello! I am Divakar, a passionate web developer creating interactive and visually appealing web applications. I enjoy building modern, responsive, and accessible web experiences using modern HTML5 and CSS3 features.</p>
+    </article>
+
+    <!-- Hobbies Section -->
+    <section>
+        <h2>My Hobbies</h2>
+        <ul>
+            <li>Coding & Building Web Apps</li>
+            <li>Reading Tech Blogs</li>
+            <li>Photography</li>
+            <li>Playing Chess</li>
+        </ul>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <h3>Contact Information</h3>
+        <p>Email: divakar@example.com</p>
+        <p>Phone: +91 98765 43210</p>
+    </footer>
+
+</body>
+</html>
