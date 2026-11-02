@@ -1,0 +1,138 @@
+Stop watch
+
+APP.JS
+
+
+import React from 'react';
+import Stopwatch from './components/Stopwatch';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <Stopwatch />
+    </div>
+  );
+}
+
+export default App;
+
+
+STOPWATCH.JSX
+
+
+import React, { Component } from 'react';
+
+class Stopwatch extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      time: 0, // time in milliseconds
+      isRunning: false,
+      laps: []
+    };
+    this.timer = null;
+  }
+
+  componentDidMount() {
+    // Lifecycle setup if needed
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // Handles interval creation when isRunning switches to true
+    if (!prevState.isRunning && this.state.isRunning) {
+      const startTime = Date.now() - this.state.time;
+      this.timer = setInterval(() => {
+        this.setState({
+          time: Date.now() - startTime
+        });
+      }, 10);
+    } else if (prevState.isRunning && !this.state.isRunning) {
+      clearInterval(this.timer);
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  // Format milliseconds into mm:ss.cs (minutes:seconds.centiseconds)
+  formatTime = (milliseconds) => {
+    const totalCentiseconds = Math.floor(milliseconds / 10);
+    const cs = totalCentiseconds % 100;
+    const totalSeconds = Math.floor(totalCentiseconds / 100);
+    const seconds = totalSeconds % 60;
+    const minutes = Math.floor(totalSeconds / 60);
+
+    const pad = (num) => String(num).padStart(2, '0');
+    return `${pad(minutes)}:${pad(seconds)}.${pad(cs)}`;
+  };
+
+  handleStart = () => {
+    this.setState({ isRunning: true });
+  };
+
+  handleStop = () => {
+    if (this.state.isRunning) {
+      this.setState(prevState => ({
+        isRunning: false,
+        laps: [...prevState.laps, this.state.time]
+      }));
+    }
+  };
+
+  handleReset = () => {
+    clearInterval(this.timer);
+    this.setState({
+      time: 0,
+      isRunning: false,
+      laps: []
+    });
+  };
+
+  handleAddLap = () => {
+    if (this.state.isRunning) {
+      this.setState(prevState => ({
+        laps: [...prevState.laps, this.state.time]
+      }));
+    }
+  };
+
+  render() {
+    const { time, isRunning, laps } = this.state;
+
+    return (
+      <div className="stopwatch-container">
+        <h1>Stopwatch</h1>
+        <div className="timer-display">
+          {this.formatTime(time)}
+        </div>
+        <div className="button-group">
+          <button onClick={this.handleStart} disabled={isRunning}>
+            Start
+          </button>
+          <button onClick={this.handleStop} disabled={!isRunning}>
+            Stop
+          </button>
+          <button onClick={this.handleReset} disabled={isRunning}>
+            Reset
+          </button>
+          <button onClick={this.handleAddLap} disabled={!isRunning}>
+            Add Lap
+          </button>
+        </div>
+        <div className="laps-container">
+          <ul>
+            {laps.map((lapTime, index) => (
+              <li key={index}>
+                {this.formatTime(lapTime)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default Stopwatch;
