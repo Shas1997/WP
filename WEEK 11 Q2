@@ -1,0 +1,91 @@
+Product Price Tag
+
+Project Statement
+
+Sneha is a junior frontend developer at ShopEase Technologies, a company that builds 
+e-commerce solutions for retail brands. Her team lead, Rajan, has assigned her a task to build a Price 
+Tag component that displays a product's name and price, with a button to toggle a discount on the price.
+
+APP.JS
+
+import React from 'react';
+import PriceTag from './PriceTag';
+
+function App() {
+  return (
+    <div>
+      <PriceTag productName="Wireless Headphones" originalPrice={2000} />
+    </div>
+  );
+}
+
+export default App;
+
+PRICETAG.JSX
+
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import './PriceTag.css';
+
+function PriceTag({ productName, originalPrice }) {
+  const [isDiscounted, setIsDiscounted] = useState(false);
+
+  // Calculate 10% discount
+  const discountedPrice = originalPrice - originalPrice * 0.10;
+  const currentPrice = isDiscounted ? discountedPrice : originalPrice;
+
+  return (
+    <div id="price-tag">
+      <h2 id="product-name">{productName}</h2>
+      <p id="displayed-price">Price: ₹{currentPrice}</p>
+      <button 
+        id="toggle-discount" 
+        onClick={() => setIsDiscounted(!isDiscounted)}
+      >
+        {isDiscounted ? "Remove Discount" : "Apply Discount"}
+      </button>
+    </div>
+  );
+}
+
+PriceTag.propTypes = {
+  productName: PropTypes.string.isRequired,
+  originalPrice: PropTypes.number.isRequired,
+};
+
+export default PriceTag;
+
+PRICETAG.CSS
+
+#price-tag {
+  background: white;
+  border: 2px solid #e67e22;
+  border-radius: 10px;
+  padding: 24px;
+  max-width: 400px;
+  margin: 40px auto;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#product-name {
+  color: #e67e22;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+#displayed-price {
+  color: #2c3e50;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+#toggle-discount {
+  background: #e67e22;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
