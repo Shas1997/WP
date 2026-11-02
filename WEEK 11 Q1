@@ -1,0 +1,78 @@
+Library Book Card
+
+Project Statement
+
+Karthik is a junior frontend developer at PageTurn Digital, a company that builds library management systems for colleges. His team lead, Kavitha, has assigned him a task to build a Book Card component that displays a book's title, author name, and availability status in a styled card format.
+
+APP.JS
+import React from 'react';
+import BookCard from './BookCard';
+
+function App() {
+  return (
+    <div>
+      <BookCard 
+        bookTitle="The Alchemist" 
+        authorName="Paulo Coelho" 
+        availabilityStatus="Available" 
+      />
+    </div>
+  );
+}
+
+export default App;
+
+BOOKCARD.JSX
+
+import React from 'react';
+import PropTypes from 'prop-types';
+import './BookCard.css';
+
+function BookCard({ bookTitle, authorName, availabilityStatus }) {
+  return (
+    <div id="book-card">
+      <h2 id="book-title">{bookTitle}</h2>
+      <p id="author-name">Author: {authorName}</p>
+      <p id="availability-status">Status: {availabilityStatus}</p>
+    </div>
+  );
+}
+
+BookCard.propTypes = {
+  bookTitle: PropTypes.string.isRequired,
+  authorName: PropTypes.string.isRequired,
+  availabilityStatus: PropTypes.string.isRequired,
+};
+
+export default BookCard;
+
+BOOKCARD.CSS
+
+#book-card {
+  background: white;
+  border: 2px solid #6c63ff;
+  border-radius: 10px;
+  padding: 24px;
+  max-width: 400px;
+  margin: 40px auto;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#book-title {
+  color: #6c63ff;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+#author-name {
+  color: #555;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+#availability-status {
+  color: #27ae60;
+  font-size: 18px;
+  font-weight: bold;
+}
