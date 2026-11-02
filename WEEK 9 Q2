@@ -1,0 +1,148 @@
+Food Order Management System
+
+FOOD ORDER.JSX
+
+
+import React, { useState } from 'react';
+
+function FoodOrder() {
+  // Initial predefined list of food orders
+  const [orders, setOrders] = useState([
+    { id: 1, item: 'Burger', quantity: 2, price: 5.99 },
+    { id: 2, item: 'Pizza', quantity: 1, price: 12.49 },
+    { id: 3, item: 'Pasta', quantity: 3, price: 8.99 }
+  ]);
+
+  // State for the new order form inputs
+  const [newOrder, setNewOrder] = useState({
+    item: '',
+    quantity: '',
+    price: ''
+  });
+
+  // Handle input changes in the form
+  const handleNewOrderChange = (e) => {
+    const { name, value } = e.target;
+    setNewOrder((prevOrder) => ({
+      ...prevOrder,
+      [name]: value
+    }));
+  };
+
+  // Handle adding a new order
+  const handleAddOrder = (e) => {
+    e.preventDefault();
+
+    // Validate that no fields are empty
+    if (!newOrder.item.trim() || !newOrder.quantity || !newOrder.price) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    // Generate a new unique ID using Math.max()
+    const newId = orders.length > 0 ? Math.max(...orders.map((o) => o.id)) + 1 : 1;
+
+    const orderToAdd = {
+      id: newId,
+      item: newOrder.item.trim(),
+      quantity: parseInt(newOrder.quantity, 10),
+      price: parseFloat(newOrder.price)
+    };
+
+    // Update orders list and clear form fields
+    setOrders([...orders, orderToAdd]);
+    setNewOrder({ item: '', quantity: '', price: '' });
+  };
+
+  return (
+    <div className="container my-4">
+      <h1 className="text-primary mb-3">Food Order Management</h1>
+
+      {/* Orders Table */}
+      <table className="table table-striped table-bordered mb-4">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map((order) => (
+            <tr key={order.id}>
+              <td>{order.id}</td>
+              <td>{order.item}</td>
+              <td>{order.quantity}</td>
+              <td>{order.price.toFixed(2)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Add New Food Order Section */}
+      <div className="card p-4 shadow-sm">
+        <h2 className="text-success mb-3">Add New Food Order</h2>
+        <form onSubmit={handleAddOrder}>
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              name="item"
+              placeholder="Food Item"
+              value={newOrder.item}
+              onChange={handleNewOrderChange}
+            />
+          </div>
+
+          <div className="mb-3">
+            <input
+              type="number"
+              className="form-control"
+              name="quantity"
+              placeholder="Quantity"
+              min="1"
+              value={newOrder.quantity}
+              onChange={handleNewOrderChange}
+            />
+          </div>
+
+          <div className="mb-3">
+            <input
+              type="number"
+              className="form-control"
+              name="price"
+              placeholder="Price ($)"
+              step="0.01"
+              min="0"
+              value={newOrder.price}
+              onChange={handleNewOrderChange}
+            />
+          </div>
+
+          <button type="submit" className="btn btn-success w-100">
+            Add Order
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default FoodOrder;
+
+
+APP.JS
+
+import React from 'react';
+import FoodOrder from './FoodOrder';
+
+function App() {
+  return (
+    <div>
+      <FoodOrder />
+    </div>
+  );
+}
+
+export default App;
