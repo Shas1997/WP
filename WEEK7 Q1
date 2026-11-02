@@ -1,0 +1,159 @@
+index.html 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Attendance Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .d-none { display: none; }
+  </style>
+</head>
+<body class="container py-4">
+
+  <h1 class="mb-4">Student Attendance Tracker</h1>
+
+  <!-- Hidden Select (Required for test initialisation) -->
+  <select id="sectionSelect" class="d-none"></select>
+
+  <!-- Fieldset 1: Section Selection -->
+  <fieldset class="border p-3 mb-4">
+    <legend class="float-none w-auto px-2 fs-5 fw-bold">Select Class Section</legend>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="section" id="sectionA" value="A">
+      <label class="form-check-label" for="sectionA">Section A</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="section" id="sectionB" value="B">
+      <label class="form-check-label" for="sectionB">Section B</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="section" id="sectionC" value="C">
+      <label class="form-check-label" for="sectionC">Section C</label>
+    </div>
+    <div class="mt-2">
+      Selected Section: <strong id="sectionDisplay">None</strong>
+    </div>
+  </fieldset>
+
+  <!-- Fieldset 2: Mark Attendance -->
+  <fieldset class="border p-3 mb-4">
+    <legend class="float-none w-auto px-2 fs-5 fw-bold">Mark Attendance</legend>
+    <div class="form-check mb-2">
+      <input class="form-check-input student-checkbox" type="checkbox" id="student1">
+      <label class="form-check-label" for="student1">Student 1</label>
+    </div>
+    <div class="form-check mb-2">
+      <input class="form-check-input student-checkbox" type="checkbox" id="student2">
+      <label class="form-check-label" for="student2">Student 2</label>
+    </div>
+    <div class="form-check mb-2">
+      <input class="form-check-input student-checkbox" type="checkbox" id="student3">
+      <label class="form-check-label" for="student3">Student 3</label>
+    </div>
+    <div class="form-check mb-2">
+      <input class="form-check-input student-checkbox" type="checkbox" id="student4">
+      <label class="form-check-label" for="student4">Student 4</label>
+    </div>
+    <div class="form-check mb-2">
+      <input class="form-check-input student-checkbox" type="checkbox" id="student5">
+      <label class="form-check-label" for="student5">Student 5</label>
+    </div>
+    
+    <button id="submitBtn" class="btn btn-primary mt-3">Calculate Attendance</button>
+  </fieldset>
+
+  <!-- Fieldset 3: Attendance Summary -->
+  <fieldset class="border p-3 mb-4">
+    <legend class="float-none w-auto px-2 fs-5 fw-bold">Attendance Summary</legend>
+    <div class="row text-center">
+      <div class="col-md-4">
+        <div class="bg-success text-white p-3 rounded">
+          <div>Present</div>
+          <h2 id="presentCount">0</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="bg-danger text-white p-3 rounded">
+          <div>Absent</div>
+          <h2 id="absentCount">0</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="bg-primary text-white p-3 rounded">
+          <div>Attendance %</div>
+          <h2 id="attendancePercent">0%</h2>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+script.js 
+document.addEventListener("DOMContentLoaded", function () {
+  const sectionRadios = document.querySelectorAll('input[name="section"]');
+  const sectionDisplay = document.getElementById("sectionDisplay");
+  const checkboxes = document.querySelectorAll(".student-checkbox");
+  const submitBtn = document.getElementById("submitBtn");
+  const presentCountEl = document.getElementById("presentCount");
+  const absentCountEl = document.getElementById("absentCount");
+  const attendancePercentEl = document.getElementById("attendancePercent");
+
+  // Update section display immediately on selection
+  sectionRadios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      // Loop requirement: while loop to iterate radio buttons
+      let i = 0;
+      let selectedSection = "";
+      while (i < sectionRadios.length) {
+        if (sectionRadios[i].checked) {
+          selectedSection = sectionRadios[i].value;
+          break;
+        }
+        i++;
+      }
+      if (sectionDisplay) {
+        sectionDisplay.textContent = selectedSection;
+      }
+    });
+  });
+
+  // Calculate Attendance button click handler
+  if (submitBtn) {
+    submitBtn.addEventListener("click", function () {
+      let presentCount = 0;
+
+      // Loop requirement: for loop to iterate over checkboxes
+      for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          presentCount++;
+        }
+      }
+
+      const totalStudents = checkboxes.length;
+      let absentCount = 0;
+
+      // Loop requirement: do...while loop to compute absent count
+      let j = 0;
+      if (totalStudents > 0) {
+        do {
+          if (!checkboxes[j].checked) {
+            absentCount++;
+          }
+          j++;
+        } while (j < totalStudents);
+      }
+
+      const percent = totalStudents > 0 ? ((presentCount / totalStudents) * 100).toFixed(1) : 0;
+
+      presentCountEl.textContent = presentCount;
+      absentCountEl.textContent = absentCount;
+      attendancePercentEl.textContent = percent + "%";
+    });
+  }
+});
