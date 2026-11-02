@@ -1,0 +1,117 @@
+Weather Point - City Temperatures
+
+CITYCARD.JSX
+
+import React from 'react';
+import './CityCard.css';
+
+const CityCard = ({ city, temperature, unit }) => {
+  return (
+    <div className="city-card">
+      <h2>{city}</h2>
+      <p>{temperature} {unit}</p>
+    </div>
+  );
+};
+
+export default CityCard;
+
+APP.JS
+import React, { useState } from 'react';
+import CityCard from './CityCard';
+import './App.css';
+
+const App = () => {
+  const citiesData = [
+    { city: 'Chennai', tempInCelsius: 30 },
+    { city: 'Delhi', tempInCelsius: 25 },
+    { city: 'Shimla', tempInCelsius: 10 },
+  ];
+
+  const [unit, setUnit] = useState('C');
+
+  const toggleUnit = () => {
+    setUnit((prevUnit) => (prevUnit === 'C' ? 'F' : 'C'));
+  };
+
+  const convertTemperature = (tempInCelsius) => {
+    if (unit === 'F') {
+      return (tempInCelsius * 9) / 5 + 32;
+    }
+    return tempInCelsius;
+  };
+
+  return (
+    <div className="app-container">
+      <h1>Weather Point</h1>
+      <h3>City Temperatures</h3>
+
+      <button onClick={toggleUnit}>
+        {unit === 'C' ? 'Show in Fahrenheit' : 'Show in Celsius'}
+      </button>
+
+      <div className="card-row">
+        {citiesData.map((item) => (
+          <CityCard
+            key={item.city}
+            city={item.city}
+            temperature={convertTemperature(item.tempInCelsius)}
+            unit={unit}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default App;
+
+APP.CSS
+.app-container {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #007bff;
+  color: white;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.card-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+CITYCARD.CSS
+.city-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+  background-color: #f9f9f9;
+}
+
+.city-card h2 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+}
+
+.city-card p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
