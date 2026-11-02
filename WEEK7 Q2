@@ -1,0 +1,151 @@
+(MOVIE GENRE FORM)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Genre Poll</title>
+</head>
+<body>
+
+    <!-- Fieldset 1: Age Group Selection -->
+    <fieldset>
+        <legend>Select Your Age Group</legend>
+        <label>
+            <input type="radio" name="ageGroup" value="teen"> Teen
+        </label>
+        <label>
+            <input type="radio" name="ageGroup" value="adult"> Adult
+        </label>
+        <label>
+            <input type="radio" name="ageGroup" value="senior"> Senior
+        </label>
+        <p>Selected Age: <span id="ageDisplay">None</span></p>
+    </fieldset>
+
+    <!-- Fieldset 2: Favourite Genres Selection -->
+    <fieldset>
+        <legend>Choose Your Favourite Genres</legend>
+        <label><input type="checkbox" class="genre-checkbox" id="genre1" value="Action"> Action</label><br>
+        <label><input type="checkbox" class="genre-checkbox" id="genre2" value="Comedy"> Comedy</label><br>
+        <label><input type="checkbox" class="genre-checkbox" id="genre3" value="Drama"> Drama</label><br>
+        <label><input type="checkbox" class="genre-checkbox" id="genre4" value="Thriller"> Thriller</label><br>
+        <label><input type="checkbox" class="genre-checkbox" id="genre5" value="Romance"> Romance</label><br>
+        <label><input type="checkbox" class="genre-checkbox" id="genre6" value="Sci-Fi"> Sci-Fi</label><br>
+
+        <br>
+        <button type="button" id="pollSubmitBtn">Submit Poll</button>
+        <button type="button" id="pollResetBtn">Reset</button>
+    </fieldset>
+
+    <!-- Fieldset 3: Poll Results -->
+    <fieldset>
+        <legend>Poll Results</legend>
+        <div>
+            <p>Genres Selected: <span id="genreCount">0</span></p>
+            <p>Total Genres Available: <span id="totalGenres">0</span></p>
+        </div>
+        <p><strong>Selected Genres:</strong></p>
+        <div id="selectedGenresList">None</div>
+    </fieldset>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+SCRIPT.JS
+document.addEventListener("DOMContentLoaded", () => {
+    // DOM Elements
+    const ageRadios = document.querySelectorAll('input[name="ageGroup"]');
+    const ageDisplay = document.getElementById("ageDisplay");
+    
+    const checkboxes = document.querySelectorAll(".genre-checkbox");
+    const genreCount = document.getElementById("genreCount");
+    const totalGenres = document.getElementById("totalGenres");
+    const selectedGenresList = document.getElementById("selectedGenresList");
+    
+    const pollSubmitBtn = document.getElementById("pollSubmitBtn");
+    const pollResetBtn = document.getElementById("pollResetBtn");
+
+    // Display total available genres on initial load
+    if (totalGenres) {
+        totalGenres.textContent = checkboxes.length;
+    }
+
+    // 1. Age Group Selection - using a while loop to handle radio selection updates
+    ageRadios.forEach((radio) => {
+        radio.addEventListener("change", () => {
+            let i = 0;
+            let selectedAge = "";
+            
+            // While loop requirement to find selected age group
+            while (i < ageRadios.length) {
+                if (ageRadios[i].checked) {
+                    selectedAge = ageRadios[i].value;
+                    break;
+                }
+                i++;
+            }
+            
+            if (ageDisplay) {
+                ageDisplay.textContent = selectedAge;
+            }
+        });
+    });
+
+    // 2. Submit Button Logic - using for loop and do...while loop
+    pollSubmitBtn.addEventListener("click", () => {
+        let count = 0;
+        const selectedGenreNames = [];
+
+        // For loop requirement to iterate over genres and count selected ones
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                count++;
+                // Get label text or checkbox value
+                const labelText = checkboxes[i].parentElement.textContent.trim() || checkboxes[i].value;
+                selectedGenreNames.push(labelText);
+            }
+        }
+
+        // Update count display
+        if (genreCount) {
+            genreCount.textContent = count;
+        }
+
+        // Do...While loop requirement to build the genre result list text
+        if (selectedGenresList) {
+            if (selectedGenreNames.length === 0) {
+                selectedGenresList.textContent = "None";
+            } else {
+                let k = 0;
+                let resultText = "";
+                do {
+                    resultText += selectedGenreNames[k];
+                    if (k < selectedGenreNames.length - 1) {
+                        resultText += ", ";
+                    }
+                    k++;
+                } while (k < selectedGenreNames.length);
+
+                selectedGenresList.textContent = resultText;
+            }
+        }
+    });
+
+    // 3. Reset Button Logic - clears selections and resets genre count
+    pollResetBtn.addEventListener("click", () => {
+        checkboxes.forEach((cb) => {
+            cb.checked = false;
+        });
+
+        if (genreCount) {
+            genreCount.textContent = 0;
+        }
+
+        if (selectedGenresList) {
+            selectedGenresList.textContent = "None";
+        }
+    });
+});
